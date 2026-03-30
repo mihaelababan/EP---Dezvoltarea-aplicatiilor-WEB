@@ -31,3 +31,18 @@
   flex-direction: column;
   gap: 8px;
 }
+.itemCard {
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px !important;
+  border-left: 6px solid; 
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.itemCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1) !important;
+}
