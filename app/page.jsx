@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import { Container, Typography, Box, Paper, Divider } from '@mui/material';
 import ToDoForm from '@/components/ToDoForm/ToDoForm';
 import ToDoItem from '@/components/ToDoItem/ToDoItem';
 
@@ -9,52 +9,59 @@ export default function Home() {
   const [taskToEdit, setTaskToEdit] = useState(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('my_tasks_list');
-    if (saved) {
-      setTodos(JSON.parse(saved));
-    }
+    const saved = localStorage.getItem('bagheera_tasks');
+    if (saved) setTodos(JSON.parse(saved));
   }, []);
-
   const handleSave = (formData) => {
-    let newTodoList;
-
+    let newList;
     if (taskToEdit) {
-      newTodoList = todos.map((t) => 
-        t.id === taskToEdit.id ? { ...t, ...formData } : t
-      );
+      newList = todos.map((t) => (t.id === taskToEdit.id ? { ...t, ...formData } : t));
       setTaskToEdit(null);
     } else {
-      const newTask = { ...formData, id: Date.now() };
-      newTodoList = [...todos, newTask];
+      newList = [...todos, { ...formData, id: Date.now() }];
     }
+    updateAndSave(newList);
+  };
 
-    setTodos(newTodoList);
-    
-    localStorage.setItem('my_tasks_list', JSON.stringify(newTodoList));
+  const handleDelete = (id) => {
+    if (window.confirm("Sigur vrei să ștergi acest task?")) {
+      const newList = todos.filter((t) => t.id !== id);
+      updateAndSave(newList);
+    }
+  };
+
+  const updateAndSave = (newList) => {
+    setTodos(newList);
+    localStorage.setItem('bagheera_tasks', JSON.stringify(newList));
   };
 
   return (
     <Container maxWidth="sm" sx={{ py: 5 }}>
-      <Typography variant="h4" align="center" gutterBottom>ToDo App</Typography>
+      <Typography variant="h4" align="center" gutterBottom fontWeight="bold">
+        ToDo Manager
+      </Typography>
 
-      <Box sx={{ mb: 4 }}>
+      <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
         <ToDoForm 
           onSubmit={handleSave} 
           editData={taskToEdit} 
           onCancel={() => setTaskToEdit(null)} 
         />
-      </Box>
+      </Paper>
+
+      <Divider sx={{ mb: 3 }} />
 
       <Box>
-        <Typography variant="h6">Task-uri ({todos.length}):</Typography>
+        <Typography variant="h6" gutterBottom>Tasks ({todos.length})</Typography>
         {todos.length === 0 ? (
-          <Typography color="textSecondary">Nu există task-uri. Adaugă unul!</Typography>
+          <Typography color="textSecondary" align="center">No tasks available.</Typography>
         ) : (
-          todos.map((t) => (
+          todos.map((todo) => (
             <ToDoItem 
-              key={t.id} 
-              todo={t} 
-              onEditClick={() => setTaskToEdit(t)} 
+              key={todo.id} 
+              todo={todo} 
+              onEdit={() => setTaskToEdit(todo)} 
+              onDelete={() => handleDelete(todo.id)} 
             />
           ))
         )}
