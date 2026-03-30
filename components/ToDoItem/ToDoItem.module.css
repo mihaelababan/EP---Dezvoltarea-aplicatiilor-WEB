@@ -1,0 +1,33 @@
+.itemCard {
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 5px solid #1976d2;
+}
+
+.idLabel {
+  color: #9e9e9e;
+  display: block;
+}
+
+.taskTitle {
+  margin-top: 4px;
+  text-transform: capitalize;
+}
+
+.taskDesc {
+  color: #616161;
+  margin-bottom: 8px;
+}
+
+.chipStack {
+  margin-top: 8px;
+}
+
+.actionBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

@@ -1,16 +1,16 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Container, Typography, Box, Paper, TextField, InputAdornment, MenuItem, FormControl, InputLabel, Select, Stack } from '@mui/material';
+import { Container, Typography, Box, Paper, TextField, InputAdornment, MenuItem, FormControl, InputLabel, Select, Stack, Divider } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ToDoForm from '@/components/ToDoForm/ToDoForm';
 import ToDoItem from '@/components/ToDoItem/ToDoItem';
+import styles from './page.module.css'; 
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
   const [taskToEdit, setTaskToEdit] = useState(null);
-  
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('newest'); 
+  const [sortBy, setSortBy] = useState('newest');
 
   useEffect(() => {
     const saved = localStorage.getItem('bagheera_tasks');
@@ -54,20 +54,19 @@ export default function Home() {
     });
 
   return (
-    <Container maxWidth="sm" sx={{ py: 5 }}>
-      <Typography variant="h4" align="center" gutterBottom fontWeight="bold">
+    <Container maxWidth="sm" className={styles.container}>
+      <Typography variant="h4" align="center" gutterBottom className={styles.title}>
         ToDo Manager
       </Typography>
 
-      <Paper sx={{ p: 3, mb: 4 }}>
+      <Paper className={styles.formPaper}>
         <ToDoForm onSubmit={handleSave} editData={taskToEdit} onCancel={() => setTaskToEdit(null)} />
       </Paper>
 
-      <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+      <Stack direction="row" spacing={2} className={styles.filterSection}>
         <TextField
           fullWidth
           label="Search Tasks"
-          variant="outlined"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           InputProps={{
@@ -79,7 +78,7 @@ export default function Home() {
           }}
         />
         
-        <FormControl sx={{ minWidth: 120 }}>
+        <FormControl className={styles.sortControl}>
           <InputLabel>Sort</InputLabel>
           <Select
             value={sortBy}
@@ -93,8 +92,12 @@ export default function Home() {
         </FormControl>
       </Stack>
 
-      <Box>
-        <Typography variant="h6">My Tasks ({processedTodos.length})</Typography>
+      <Divider className={styles.divider} />
+
+      <Box className={styles.listContainer}>
+        <Typography variant="h6" className={styles.listTitle}>
+          My Tasks ({processedTodos.length})
+        </Typography>
         {processedTodos.map((todo) => (
           <ToDoItem 
             key={todo.id} 
